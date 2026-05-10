@@ -1,0 +1,6 @@
+[gd_resource type="FontFile" format=2]
+
+[ext_resource type="FontFile" uid="uid://lkh6i14tjx60" path="res://mods-unpacked/GodotModding-ModConfig/assets/fonts/CascadiaCode.ttf" id="1"]
+
+[resource]
+font_data = ExtResource( 1 )

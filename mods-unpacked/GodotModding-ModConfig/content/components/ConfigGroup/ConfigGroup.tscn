@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://1n6ixcgymnai"]
+
+[ext_resource type="Script" uid="uid://c7ou1d3rpv8d" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigGroup/ConfigGroup.gd" id="1_br6i5"]
+[ext_resource type="FontFile" path="res://mods-unpacked/GodotModding-ModConfig/assets/fonts/text.tres" id="2_stjkv"]
+
+[node name="ConfigGroup" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_br6i5")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="GroupName" type="Label" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_stjkv")
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="GroupComponents" type="VBoxContainer" parent="MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2

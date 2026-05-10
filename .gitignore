@@ -1,3 +1,14 @@
+# Ignore everything in the root directory by default
+/*
+
+# DO NOT ignore these specific files/folders (The '!' means 'Allow')
+!.gitignore
+!.gitattributes
+!mods-unpacked/
+!Roadbobek/
+
+# Even inside the mods folder, ignore these if they exist
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia

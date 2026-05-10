@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://d1d4awle3xmwt"]
+
+[ext_resource type="PackedScene" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ModButton/ModButton.tscn" id="1"]
+[ext_resource type="Shader" uid="uid://c7pkqaollpey" path="res://mods-unpacked/GodotModding-ModConfig/assets/shader/blur.tres" id="1_i1mi7"]
+[ext_resource type="PackedScene" uid="uid://cmbd33mfmb24u" path="res://mods-unpacked/GodotModding-ModConfig/content/ModConfigEditor/ModConfigEditor.tscn" id="2"]
+[ext_resource type="FontFile" path="res://mods-unpacked/GodotModding-ModConfig/assets/fonts/Heading.tres" id="3"]
+[ext_resource type="Script" uid="uid://c740ba1xl5csd" path="res://mods-unpacked/GodotModding-ModConfig/content/ModSelection/ModSelection.gd" id="4"]
+[ext_resource type="Script" uid="uid://fvkpjpb833oy" path="res://mods-unpacked/GodotModding-ModConfig/content/ModSelection/ModList.gd" id="6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nhfax"]
+shader = ExtResource("1_i1mi7")
+shader_parameter/radius = 0.1
+shader_parameter/animate = false
+shader_parameter/square_scale = 0.1
+shader_parameter/blur_amount = 5.773
+shader_parameter/mix_amount = 0.625
+shader_parameter/color_over = Color(0, 0, 0, 1)
+
+[node name="ModSelection" type="PanelContainer" unique_id=925408946]
+visible = false
+material = SubResource("ShaderMaterial_nhfax")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -200.0
+offset_right = 175.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1273803029]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1417402992]
+layout_mode = 2
+
+[node name="LabelSelectMod" type="Label" parent="MarginContainer/VBoxContainer" unique_id=685694118]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+text = "Select Mod"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1199645693]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 20
+
+[node name="ModList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer" unique_id=1573524495]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+script = ExtResource("6")
+mod_button_scene = ExtResource("1")
+
+[node name="ConfigEditor" parent="." unique_id=72261490 instance=ExtResource("2")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="mod_btn_pressed" from="MarginContainer/VBoxContainer/MarginContainer/ModList" to="." method="_on_ModList_mod_btn_pressed"]

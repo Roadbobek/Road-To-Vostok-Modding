@@ -1,0 +1,149 @@
+[gd_scene format=3 uid="uid://cmbd33mfmb24u"]
+
+[ext_resource type="PackedScene" uid="uid://coypyftyuf1sk" path="res://mods-unpacked/GodotModding-ModConfig/content/ModConfigEditor/PopupNewConfig/PopupNewConfig.tscn" id="1"]
+[ext_resource type="Shader" uid="uid://c7pkqaollpey" path="res://mods-unpacked/GodotModding-ModConfig/assets/shader/blur.tres" id="1_m2hb4"]
+[ext_resource type="PackedScene" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigSelection/ConfigSelection.tscn" id="2"]
+[ext_resource type="FontFile" path="res://mods-unpacked/GodotModding-ModConfig/assets/fonts/text.tres" id="3"]
+[ext_resource type="FontFile" path="res://mods-unpacked/GodotModding-ModConfig/assets/fonts/Heading.tres" id="4"]
+[ext_resource type="Script" uid="uid://bqy2wko2r11fw" path="res://mods-unpacked/GodotModding-ModConfig/content/ModConfigEditor/ModConfigEditor.gd" id="5"]
+[ext_resource type="Script" uid="uid://dru2d15507f1n" path="res://mods-unpacked/GodotModding-ModConfig/content/ModConfigEditor/ModConfigSections.gd" id="6"]
+[ext_resource type="PackedScene" uid="uid://1n6ixcgymnai" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigGroup/ConfigGroup.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigInputNumber/ConfigInputNumber.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigInputColor/ConfigInputColor.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://dilnigk53xbrd" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigInputBoolean/ConfigInputBoolean.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://bq2lbjkptbk5i" path="res://mods-unpacked/GodotModding-ModConfig/content/components/ConfigInputString/ConfigInputString.tscn" id="12"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1e647"]
+shader = ExtResource("1_m2hb4")
+shader_parameter/radius = 0.1
+shader_parameter/animate = false
+shader_parameter/square_scale = 0.1
+shader_parameter/blur_amount = 5.773
+shader_parameter/mix_amount = 0.605
+shader_parameter/color_over = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vk0kf"]
+shader = ExtResource("1_m2hb4")
+shader_parameter/radius = 0.1
+shader_parameter/animate = false
+shader_parameter/square_scale = 0.1
+shader_parameter/blur_amount = 5.832
+shader_parameter/mix_amount = 0.735
+shader_parameter/color_over = Color(0, 0, 0, 1)
+
+[node name="ModConfigEditor" type="PanelContainer" unique_id=275099604]
+visible = false
+material = SubResource("ShaderMaterial_1e647")
+custom_minimum_size = Vector2(600, 600)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -275.0
+offset_right = 300.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=648011459]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1814402828]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=1610802427]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LabelConfigFor" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=734608375]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4")
+text = "Configs for %MOD_ID%"
+
+[node name="ConfigSelection" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1581651731 instance=ExtResource("2")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ConfigSettings" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=888794380]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/ConfigSettings" unique_id=1086092106]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/ConfigSettings/ScrollContainer" unique_id=1629768764]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LabelConfigSettings" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/ConfigSettings/ScrollContainer/VBoxContainer" unique_id=1097449093]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4")
+text = "Config Settings"
+
+[node name="ConfigSections" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/ConfigSettings/ScrollContainer/VBoxContainer" unique_id=129625919]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("6")
+group_component_scene = ExtResource("8")
+string_input_component_scene = ExtResource("12")
+color_input_component_scene = ExtResource("10")
+number_input_component_scene = ExtResource("9")
+boolean_input_component_scene = ExtResource("11")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1850495777]
+layout_mode = 2
+
+[node name="ButtonBack" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1478471895]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Back"
+
+[node name="Spacer" type="Control" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1799667268]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="ButtonSave" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1059827611]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Save"
+
+[node name="InfoText" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=888843872]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PopupNewConfig" parent="." unique_id=713340451 instance=ExtResource("1")]
+visible = false
+material = SubResource("ShaderMaterial_vk0kf")
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[connection signal="add_config_pressed" from="MarginContainer/ScrollContainer/VBoxContainer/ConfigSelection" to="." method="_on_ConfigSelection_add_config_pressed"]
+[connection signal="config_selected" from="MarginContainer/ScrollContainer/VBoxContainer/ConfigSelection" to="." method="_on_ConfigSelection_config_selected"]
+[connection signal="remove_config_pressed" from="MarginContainer/ScrollContainer/VBoxContainer/ConfigSelection" to="." method="_on_ConfigSelection_remove_config_pressed"]
+[connection signal="config_data_changed" from="MarginContainer/ScrollContainer/VBoxContainer/ConfigSettings/ScrollContainer/VBoxContainer/ConfigSections" to="." method="_on_ConfigSections_config_data_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/ButtonBack" to="." method="_on_ButtonBack_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/ButtonSave" to="." method="_on_ButtonSave_pressed"]
+[connection signal="pressed_submit" from="PopupNewConfig" to="." method="_on_PopupNewConfig_pressed_submit"]
