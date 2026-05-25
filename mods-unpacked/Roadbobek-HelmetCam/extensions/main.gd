@@ -10,13 +10,19 @@ var base_fov
 
 func _input(event: InputEvent) -> void:
     if event is InputEventKey:
-        if event.pressed and event.keycode == KEY_BRACKETLEFT:
-            print("Helmet Cam - On")
-            cam_toggle = true
-
         if event.pressed and event.keycode == KEY_BRACKETRIGHT:
-            print("Helmet Cam - Off")
-            cam_toggle = false
+            if cam_toggle:
+                cam_toggle = false
+            else:
+                cam_toggle = true
+                
+        #if event.pressed and event.keycode == KEY_BRACKETLEFT:
+            #print("Helmet Cam - On")
+            #cam_toggle = true
+#
+        #if event.pressed and event.keycode == KEY_BRACKETRIGHT:
+            #print("Helmet Cam - Off")
+            #cam_toggle = false
             
 func _ready()->void:
     ModLoaderLog.info("Main script Ready", MYMOD_LOG)
@@ -55,7 +61,6 @@ func _process(_delta: float) -> void:
             get_node("/root/Map/Core/Camera/Manager").rotation = Vector3(0.0, -3.14, 0.0)
         gameData.baseFOV = base_fov
 
-    # Increase noise / screen shake for cam and guns in Noise.gd plus CameraNoise.gd !
 
 
 

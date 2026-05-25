@@ -9,7 +9,9 @@ extends Node
 
 const MOD_DIR = "Roadbobek-HelmetCam/" # name of the folder that this file is in
 const MYMOD_LOG = "Roadbobek-HelmetCam" # full ID of your mod (AuthorName-ModName)
-
+const NOISE_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/Noise.gd"
+const CAMERANOISE_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/CameraNoise.gd"
+const RECOIL_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/Recoil.gd"
 var dir = ""
 var ext_dir = ""
 
@@ -17,6 +19,14 @@ var ext_dir = ""
 func _init(modLoader = ModLoader):
     # ModLoaderUtils.log_info("Init", MYMOD_LOG) # bradar wat is this?
     ModLoaderLog.info("Init", MYMOD_LOG)
+    # This is the magic line that hooks your script into the game
+    ModLoaderMod.install_script_extension(NOISE_EXT_PATH) # head
+    #odLoaderMod.refresh_scene("res://Scenes/WeaponRig.tscn")
+    # This is the magic line that hooks your script into the game
+    ModLoaderMod.install_script_extension(CAMERANOISE_EXT_PATH) # gun
+    #ModLoaderMod.refresh_scene("res://Scenes/Core.tscn")
+    
+    ModLoaderMod.install_script_extension(RECOIL_EXT_PATH) # recoil
 
     # ! We can't use `ModLoader` because the ModLoader instance isn't available
     # ! at this point in the mod's loading process. Instead, the class instance
