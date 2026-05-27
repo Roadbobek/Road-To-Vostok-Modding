@@ -11,6 +11,8 @@ var base_fov
 
 var smooth_speed = 8.0
 
+var fx_layer: CanvasLayer = null
+
 func _input(event: InputEvent) -> void:
     if event is InputEventKey:
         if event.pressed and event.keycode == KEY_BRACKETRIGHT:
@@ -33,6 +35,45 @@ func _ready()->void:
 
 func _process(_delta: float) -> void:
     if cam_toggle == true:
+        
+        # If the effect doesn't exist yet, build it!
+        if fx_layer == null:
+            create_webcam_filter()
+        
+        #var manager = get_node_or_null("/root/Map/Core/Camera/Manager")
+#
+        #if manager:
+            ## 1. FIXED: Set recursive to 'true' so it finds the rig no matter how deep it is
+            #var rigs = manager.find_children("*Rig*", "Node3D", true, false)
+            #
+            #if rigs.size() > 0:
+                #var weapon_rig = rigs[0]
+                #var meshes = weapon_rig.find_children("*", "MeshInstance3D", true, false)
+                #
+                #for mesh_node in meshes:
+                            ## 1. FIXED: Added 'and mesh_node.mesh' to make sure the node actually has a 3D model loaded
+                            #if mesh_node is MeshInstance3D and mesh_node.mesh:
+                                #
+                                ## 2. FIXED: Pointed to mesh_node.mesh to get the surface count correctly
+                                #for i in range(mesh_node.mesh.get_surface_count()):
+                                    #var current_mat = mesh_node.get_surface_override_material(i)
+                                    #
+                                    #if current_mat == null:
+                                        #var original_mat = mesh_node.get_active_material(i)
+                                        #
+                                        #if original_mat and original_mat is BaseMaterial3D:
+                                            #var new_mat = original_mat.duplicate()
+                                            #new_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+                                            #new_mat.albedo_color.a = 0.3 
+                                            #mesh_node.set_surface_override_material(i, new_mat)
+                                    #else:
+                                        #if current_mat is BaseMaterial3D:
+                                            #if current_mat.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA:
+                                                #current_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+                                            #
+                                            #if current_mat.albedo_color.a != 0.3:
+                                                #current_mat.albedo_color.a = 0.3   
+        
         # we check once now arfe u happy!!
         var cam = get_node_or_null("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera")
         
@@ -69,6 +110,11 @@ func _process(_delta: float) -> void:
             gameData.baseFOV = base_fov * 1.25
         
     else:
+        # If mod is toggled off, safely destroy the effect
+        if fx_layer != null:
+            fx_layer.queue_free()
+            fx_layer = null
+                
         #if has_node("/root/Map/Core/Camera"):
             #get_node("/root/Map/Core/Camera").position = Vector3(0.0, 0.0, 0.0)
             #get_node("/root/Map/Core/Camera").rotation = Vector3(0.0, 0.0, 0.0)
@@ -79,6 +125,70 @@ func _process(_delta: float) -> void:
             get_node("/root/Map/Core/Camera/Manager").position = Vector3(0.0, 0.0, 0.0)
             get_node("/root/Map/Core/Camera/Manager").rotation = Vector3(0.0, -3.14, 0.0)
         gameData.baseFOV = base_fov
+
+
+
+
+func create_webcam_filter() -> void:
+    # 1. Create a CanvasLayer so it draws directly on top of the screen UI/Game
+    fx_layer = CanvasLayer.new()
+    fx_layer.layer = 100 # Put it on a high layer so it sits on top
+    get_tree().root.add_child(fx_layer)
+    
+    # 2. Create a ColorRect that fills the entire screen
+    var rect = ColorRect.new()
+    rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT) # Make it full screen
+    rect.mouse_filter = Control.MOUSE_FILTER_IGNORE # Make sure it doesn't block mouse clicks!
+    fx_layer.add_child(rect)
+    
+    # 3. Create the Shader Material
+    var mat = ShaderMaterial.new()
+    var shader = Shader.new()
+    
+    # Paste the shader code below into the shader object
+    shader.code = """
+    shader_type canvas_item;
+    render_mode unshaded;
+
+    uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+    
+    uniform float target_width = 1280.0;   // 480p width
+    uniform float target_height = 720.0;  // 480p height
+    uniform float grain_amount : hint_range(0.0, 0.2) = 0.04; // Webcam static/noise
+
+    void fragment() {
+        // --- 1. RESOLUTION DOWNSCALING ---
+        // Force the screen coordinates to snap to a fixed grid (e.g., 1280x720)
+        vec2 grid = vec2(target_width, target_height);
+        vec2 low_res_uv = floor(SCREEN_UV * grid) / grid;
+        
+        // Grab the game screen color at that pixelated coordinate
+        vec4 col = texture(screen_texture, low_res_uv);
+        
+        // --- 2. WEBCAM SENSOR NOISE (GRAIN) ---
+        // A math trick to generate a pseudo-random number based on pixel position and time
+        float noise = fract(sin(dot(low_res_uv * TIME, vec2(12.9898, 78.233))) * 43758.5453);
+        
+        // Apply the grain to the final color (subtract 0.5 so it balances dark/light grains)
+        col.rgb += (noise - 0.5) * grain_amount;
+        
+        COLOR = col;
+    }
+    """
+    
+    mat.shader = shader
+    rect.material = mat
+
+
+
+
+
+
+
+
+
+
+
 
 
 
