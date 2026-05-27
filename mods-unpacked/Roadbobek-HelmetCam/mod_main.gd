@@ -12,6 +12,7 @@ const MYMOD_LOG = "Roadbobek-HelmetCam" # full ID of your mod (AuthorName-ModNam
 const NOISE_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/Noise.gd"
 const CAMERANOISE_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/CameraNoise.gd"
 const RECOIL_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/Recoil.gd"
+const SWAY_EXT_PATH = "res://mods-unpacked/" + MOD_DIR + "extensions/Sway.gd"
 var dir = ""
 var ext_dir = ""
 
@@ -27,7 +28,8 @@ func _init(modLoader = ModLoader):
     #ModLoaderMod.refresh_scene("res://Scenes/Core.tscn")
     
     ModLoaderMod.install_script_extension(RECOIL_EXT_PATH) # recoil
-
+    ModLoaderMod.install_script_extension(SWAY_EXT_PATH) # sway
+    
     # ! We can't use `ModLoader` because the ModLoader instance isn't available
     # ! at this point in the mod's loading process. Instead, the class instance
     # ! is passed to a mod's `_init` func via the variable `modLoader`.

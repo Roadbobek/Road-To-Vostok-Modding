@@ -8,6 +8,9 @@ const MYMOD_LOG = "Roadbobek-HelmetCam"
 var cam_toggle = false
 var base_fov
 
+
+var smooth_speed = 8.0
+
 func _input(event: InputEvent) -> void:
     if event is InputEventKey:
         if event.pressed and event.keycode == KEY_BRACKETRIGHT:
@@ -30,24 +33,40 @@ func _ready()->void:
 
 func _process(_delta: float) -> void:
     if cam_toggle == true:
+        # we check once now arfe u happy!!
+        var cam = get_node_or_null("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera")
+        
         #if has_node("/root/Map/Core/Camera"):
             #get_node("/root/Map/Core/Camera").position = Vector3(-0.25, 1.75, 0.0)
             #get_node("/root/Map/Core/Camera").rotation = Vector3(-3.0, -2.25, 0.1)
-        if has_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera"):
+        if cam:
+        #if has_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera"):
+            var target_position = Vector3.ZERO
+            var target_rotation = Vector3.ZERO
             if gameData.isAiming:
-                #we could use gameData.cameraPosition but fuck you i could do a lot of things i dont
-                get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").position = Vector3(-0.17, 0.13, 0.0)
-                get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").rotation = Vector3(-0.1, 0.0, -0.15)
+                target_position = Vector3(-0.17, 0.13, 0.0)
+                target_rotation = Vector3(-0.1, 0.0, -0.15) 
             else:
-                get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").position = Vector3(-0.17, 0.13, 0.0)
-                get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").rotation = Vector3(-0.1, 0.0, 0.0)
+                target_position = Vector3(-0.17, 0.13, 0.0)
+                target_rotation = Vector3(-0.1, 0.0, 0.0)
+            #if gameData.isAiming:
+                ## we could prob use gameData.cameraPosition but fuck you i could do a lot of things i dont
+                ## i know calling get node so often is bad btui am too lasy to amek another var so just do it yourself if its sucha  big deal
+                #get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").position = Vector3(-0.17, 0.13, 0.0)
+                #get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").rotation = Vector3(-0.1, 0.0, -0.15)
+            #else:
+                #get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").position = Vector3(-0.17, 0.13, 0.0)
+                #get_node("/root/Map/Core/Controller/Pelvis/Riser/Head/Bob/Impulse/Damage/Noise/Camera").rotation = Vector3(-0.1, 0.0, 0.0)
+            cam.position = lerp(cam.position, target_position, _delta * smooth_speed)
+            cam.rotation = lerp(cam.rotation, target_rotation, _delta * smooth_speed)
+                
         if has_node("/root/Map/Core/Camera/Manager"):
             get_node("/root/Map/Core/Camera/Manager").position = Vector3(0.06, -0.04, 0.05)
             get_node("/root/Map/Core/Camera/Manager").rotation = Vector3(0.0, -3.14, -0.314)
         if gameData.isAiming:
             gameData.baseFOV = base_fov * 0.9
         else:
-            gameData.baseFOV = base_fov * 1.15
+            gameData.baseFOV = base_fov * 1.25
         
     else:
         #if has_node("/root/Map/Core/Camera"):
